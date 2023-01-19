@@ -1,26 +1,27 @@
-import { intArg, objectType, queryType, stringArg } from 'nexus'
-import { studentResolver } from '../resolvers/student.resolver'
+import { objectType, queryType, intArg } from 'nexus'
+import { StudentResolver } from '../resolvers/student.resolver'
 
 export const Student = objectType({
   name: 'Student',
-  definition (type) {
-    type.id('id')
-    type.string('name')
-    type.int('age')
-    type.int('grade')
+  definition (field) {
+    field.id('id')
+    field.string('name')
+    field.int('age')
+    field.field('grade', { type: 'Grade' })
   }
 })
 
 export const Query = queryType({
   definition (type) {
-    type.field('getStudent', {
-      type: 'String',
+    type.field('getStudentGrades', {
+      type: 'Grade',
       args: {
-        name: stringArg(),
-        age: intArg(),
-        grade: intArg()
+        studentId: intArg()
       },
-      resolve: async (_, { name, age, grade }) => await studentResolver({ name, age, grade })
+      resolve: async (_, { studentId }): Promise<any> => {
+        const resolver = new StudentResolver(studentId ?? 0)
+        return await resolver.getGrades()
+      }
     })
   }
 })
