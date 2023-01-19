@@ -1,24 +1,23 @@
 import { ApolloServer } from 'apollo-server-express'
-import schema from './schema';
+import schema from './schema'
 import express from 'express'
 import 'dotenv/config'
 
 const app = express()
 
-const startServer = async () => {
+const startServer = async (): Promise<void> => {
   const server = new ApolloServer({
     schema
-  });
-
+  })
   await server.start()
-
   server.applyMiddleware({ app })
 
-  app.listen(process.env.PORT, () => {
-    console.log(`🚀  Server ready at: http://localhost:${process.env.PORT}/graphql`)
+  const port = process.env.PORT ?? 4000
+  app.listen(port, () => {
+    console.log(`🚀  Server ready at: http://localhost:${port}/graphql`)
   })
 }
 
-startServer();
+void startServer()
 
 export default app

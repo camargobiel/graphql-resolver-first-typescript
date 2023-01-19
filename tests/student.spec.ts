@@ -1,5 +1,5 @@
-import request from 'supertest';
-import app from '../src';
+import request from 'supertest'
+import app from '../src'
 
 describe('Student', () => {
   it('Given variables should return message correct', async () => {
